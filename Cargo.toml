@@ -1,0 +1,12 @@
+[package]
+name = "serdify"
+version = "0.1.0"
+edition = "2024"
+description = "🦀A serde error management tool for json objects"
+repository = "https://github.com/TheCukitoDev/serdify"
+authors = ["Gabriel Díaz Aguilera <gabriel@cukkito.me>"]
+categories = ["parsing"]
+license = "MIT OR Apache-2.0"
+documentation = "https://docs.rs/serdify"
+
+[dependencies]
