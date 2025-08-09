@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "Gruntfuggly.todo-tree",
+    "tamasfe.even-better-toml",
+    "bierner.markdown-mermaid",
+    "rust-lang.rust-analyzer",
+    "vadimcn.vscode-lldb",
+    "fill-labs.dependi"
+  ]
+}
