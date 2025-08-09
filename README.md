@@ -1,4 +1,4 @@
-# Serdify
+# Serdify ![Crates.io Version](https://img.shields.io/crates/v/serdify?link=https%3A%2F%2Fcrates.io%2Fcrates%2Fserdify) ![docs.rs](https://img.shields.io/docsrs/serdify?logo=rust&link=https%3A%2F%2Fdocs.rs%2Fserdify) ![GitHub branch status](https://img.shields.io/github/checks-status/TheCukitoDev/serdify/main) [![Socket Badge](https://socket.dev/api/badge/cargo/package/serdify/0.1.0)](https://socket.dev/cargo/package/serdify/overview/0.1.0)
 
 ## What is Serdify?
 
