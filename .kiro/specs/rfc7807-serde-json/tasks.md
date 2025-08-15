@@ -80,7 +80,7 @@
     - Collect errors from nested deserializations
     - _Requirements: 5.2, 6.2, 6.3_
 
-- [ ] 6. Enhance from_str function with error collection
+- [x] 6. Enhance from_str function with error collection
 
   - Replace current placeholder error handling with proper error collection
   - Integrate CollectingDeserializer with the public API
@@ -88,23 +88,23 @@
   - Ensure compatibility with existing serde_json::from_str interface
   - _Requirements: 1.1, 4.1, 4.3_
 
-- [-] 7. Add comprehensive error handling for edge cases
+- [x] 7. Add comprehensive error handling for edge cases
 
-  - [-] 7.1 Handle JSON syntax errors
+  - [x] 7.1 Handle JSON syntax errors
 
     - Detect and report malformed JSON in the detail field
     - Provide meaningful error messages for common JSON syntax issues
     - Ensure JSON syntax errors don't prevent other validation
     - _Requirements: 1.4_
 
-  - [ ] 7.2 Handle missing required fields
+  - [x] 7.2 Handle missing required fields
 
     - Detect missing fields in structs during deserialization
     - Generate appropriate InvalidParam entries for missing fields
     - Set correct JSON pointers for missing field errors
     - _Requirements: 1.3, 6.1_
 
-  - [ ] 7.3 Handle range and constraint violations
+  - [x] 7.3 Handle range and constraint violations
 
     - Detect values outside valid ranges (e.g., u8 with value > 255)
     - Generate detailed error messages with actual vs expected ranges
@@ -136,7 +136,7 @@
     - Benchmark performance compared to serde_json
     - _Requirements: 4.1, 4.3_
 
-- [ ] 9. Update example and documentation
+- [-] 9. Update example and documentation
 
   - Update main.rs example to demonstrate multiple error collection
   - Add examples showing different types of errors and their RFC 7807 output
