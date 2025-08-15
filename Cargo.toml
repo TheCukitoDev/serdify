@@ -2,13 +2,21 @@
 name = "serdify"
 version = "0.1.0"
 edition = "2024"
-description = "🦀A serde error management tool for json objects"
+description = "🦀A serde error management tool for json objects with RFC 7807 support"
 repository = "https://github.com/TheCukitoDev/serdify"
 authors = ["Gabriel Díaz Aguilera <gabriel@cukkito.me>"]
 categories = ["parsing"]
 license = "MIT OR Apache-2.0"
 documentation = "https://docs.rs/serdify"
 
+[[bin]]
+name = "serdify"
+path = "src/main.rs"
+
 [dependencies]
-serde = "1.0.219"
+eserde = { version = "0.1.7", features = ["json"] }
+jsonschema = "0.32.1"
+schemars = "1.0.4"
+serde = { version = "1.0.219", features = ["derive"] }
 serde_json = "1.0.142"
+serde_path_to_error = "0.1.17"
