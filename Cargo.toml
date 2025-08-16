@@ -8,3 +8,9 @@ authors = ["Gabriel Díaz Aguilera <gabriel@cukkito.me>"]
 categories = ["parsing"]
 license = "MIT OR Apache-2.0"
 documentation = "https://docs.rs/serdify"
+
+[dependencies]
+jsonschema = "0.32.1"
+schemars = "1.0.4"
+serde = "1.0.219"
+serde_json = "1.0.142"
