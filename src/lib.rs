@@ -533,6 +533,12 @@ pub struct ErrorCollector {
     current_path: Vec<String>,
 }
 
+impl Default for ErrorCollector {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl ErrorCollector {
     pub fn new() -> Self {
         Self {
@@ -564,7 +570,7 @@ impl ErrorCollector {
                 "#{}",
                 self.current_path
                     .iter()
-                    .map(|s| format!("/{}", s))
+                    .map(|s| format!("/{s}"))
                     .collect::<String>()
             )
         }
@@ -650,7 +656,7 @@ impl<'de> CollectingDeserializer<'de> {
 
         self.collector.add_error(
             field_name,
-            Some(format!("Expected {}, got {}", expected, actual_type)),
+            Some(format!("Expected {expected}, got {actual_type}")),
             ExpectedOrActual {
                 r#type: type_info.rust_type,
                 format: expected.to_string(),
@@ -684,7 +690,7 @@ impl<'de> CollectingDeserializer<'de> {
             )),
             ExpectedOrActual {
                 r#type: type_info.rust_type.clone(),
-                format: format!("integer in range {} to {}", min, max),
+                format: format!("integer in range {min} to {max}"),
             },
             ExpectedOrActual {
                 r#type: "integer".to_string(),
@@ -1279,7 +1285,7 @@ impl<'a, 'de> de::MapAccess<'de> for StructDeserializer<'a, 'de> {
             } else {
                 // This shouldn't happen since we check in next_key_seed
                 self.current_field += 1;
-                Err(de::Error::custom(format!("Missing field: {}", field)))
+                Err(de::Error::custom(format!("Missing field: {field}")))
             }
         } else {
             Err(de::Error::custom("No more values"))
@@ -1406,13 +1412,13 @@ impl<T: std::fmt::Debug> Result<T> {
     pub fn unwrap(self) -> T {
         match self {
             Result::Ok(t) => t,
-            Result::Err(e) => panic!("called `Result::unwrap()` on an `Err` value: {:?}", e),
+            Result::Err(e) => panic!("called `Result::unwrap()` on an `Err` value: {e:?}"),
         }
     }
 
     pub fn unwrap_err(self) -> Error {
         match self {
-            Result::Ok(t) => panic!("called `Result::unwrap_err()` on an `Ok` value: {:?}", t),
+            Result::Ok(t) => panic!("called `Result::unwrap_err()` on an `Ok` value: {t:?}"),
             Result::Err(e) => e,
         }
     }
@@ -1426,57 +1432,47 @@ fn get_meaningful_json_error_message(error: &serde_json::Error) -> String {
     // Provide more meaningful error messages for common JSON syntax issues
     if error_msg.contains("EOF while parsing") {
         format!(
-            "JSON syntax error at line {}, column {}: Unexpected end of input. The JSON appears to be incomplete. Check for missing closing braces, brackets, or quotes.",
-            line, column
+            "JSON syntax error at line {line}, column {column}: Unexpected end of input. The JSON appears to be incomplete. Check for missing closing braces, brackets, or quotes."
         )
     } else if error_msg.contains("trailing comma") {
         format!(
-            "JSON syntax error at line {}, column {}: Trailing comma found. Remove the extra comma after the last element in the object or array.",
-            line, column
+            "JSON syntax error at line {line}, column {column}: Trailing comma found. Remove the extra comma after the last element in the object or array."
         )
     } else if error_msg.contains("invalid escape") {
         format!(
-            "JSON syntax error at line {}, column {}: Invalid escape sequence in string. Use proper JSON escape sequences like \\n, \\t, \\\", \\\\, etc.",
-            line, column
+            "JSON syntax error at line {line}, column {column}: Invalid escape sequence in string. Use proper JSON escape sequences like \\n, \\t, \\\", \\\\, etc."
         )
     } else if error_msg.contains("control character") {
         format!(
-            "JSON syntax error at line {}, column {}: Unescaped control character found in string. Control characters (ASCII 0-31) must be escaped using \\uXXXX notation.",
-            line, column
+            "JSON syntax error at line {line}, column {column}: Unescaped control character found in string. Control characters (ASCII 0-31) must be escaped using \\uXXXX notation."
         )
     } else if error_msg.contains("lone leading surrogate")
         || error_msg.contains("lone trailing surrogate")
     {
         format!(
-            "JSON syntax error at line {}, column {}: Invalid Unicode surrogate pair in string. Ensure Unicode characters are properly encoded.",
-            line, column
+            "JSON syntax error at line {line}, column {column}: Invalid Unicode surrogate pair in string. Ensure Unicode characters are properly encoded."
         )
     } else if error_msg.contains("expected")
         && (error_msg.contains("found") || error_msg.contains("at"))
     {
         format!(
-            "JSON syntax error at line {}, column {}: {}. Check for missing commas, quotes, or incorrect punctuation.",
-            line, column, error_msg
+            "JSON syntax error at line {line}, column {column}: {error_msg}. Check for missing commas, quotes, or incorrect punctuation."
         )
     } else if error_msg.contains("duplicate field") {
         format!(
-            "JSON syntax error at line {}, column {}: Duplicate field found in object. JSON objects cannot have duplicate keys.",
-            line, column
+            "JSON syntax error at line {line}, column {column}: Duplicate field found in object. JSON objects cannot have duplicate keys."
         )
     } else if error_msg.contains("invalid number") {
         format!(
-            "JSON syntax error at line {}, column {}: Invalid number format. Ensure numbers follow JSON specification (no leading zeros, proper decimal notation).",
-            line, column
+            "JSON syntax error at line {line}, column {column}: Invalid number format. Ensure numbers follow JSON specification (no leading zeros, proper decimal notation)."
         )
     } else if error_msg.contains("expected value") {
         format!(
-            "JSON syntax error at line {}, column {}: Expected a JSON value (string, number, boolean, null, object, or array) but found invalid content.",
-            line, column
+            "JSON syntax error at line {line}, column {column}: Expected a JSON value (string, number, boolean, null, object, or array) but found invalid content."
         )
     } else {
         format!(
-            "JSON syntax error at line {}, column {}: {}",
-            line, column, error_msg
+            "JSON syntax error at line {line}, column {column}: {error_msg}"
         )
     }
 }
@@ -2078,7 +2074,7 @@ mod integration_tests {
         let nested = result.unwrap();
         assert_eq!(nested.user.name, "Alice");
         assert_eq!(nested.user.age, 25);
-        assert_eq!(nested.active, true);
+        assert!(nested.active);
     }
 
     #[test]
@@ -2232,7 +2228,7 @@ mod integration_tests {
 
         assert!(result.is_err());
         let error = result.unwrap_err();
-        println!("Error: {:?}", error);
+        println!("Error: {error:?}");
         assert_eq!(error.title, "Your request parameters didn't validate.");
         assert_eq!(error.status, Some(400));
 
@@ -3326,7 +3322,7 @@ mod compatibility_tests {
         assert_eq!(serde_value, our_value);
         assert_eq!(serde_value.name, "John Doe");
         assert_eq!(serde_value.age, 30);
-        assert_eq!(serde_value.active, true);
+        assert!(serde_value.active);
     }
 
     #[test]
@@ -3544,16 +3540,14 @@ mod compatibility_tests {
         }
         let our_duration = start.elapsed();
 
-        println!("serde_json duration: {:?}", serde_duration);
-        println!("our implementation duration: {:?}", our_duration);
+        println!("serde_json duration: {serde_duration:?}");
+        println!("our implementation duration: {our_duration:?}");
 
         // Our implementation should be reasonably close to serde_json performance
         // Allow up to 10x slower for successful cases (this is generous for error collection overhead)
         assert!(
             our_duration < serde_duration * 10,
-            "Our implementation is too slow: {:?} vs {:?}",
-            our_duration,
-            serde_duration
+            "Our implementation is too slow: {our_duration:?} vs {serde_duration:?}"
         );
     }
 
@@ -3594,18 +3588,15 @@ mod compatibility_tests {
         }
         let our_duration = start.elapsed();
 
-        println!("Complex struct - serde_json duration: {:?}", serde_duration);
+        println!("Complex struct - serde_json duration: {serde_duration:?}");
         println!(
-            "Complex struct - our implementation duration: {:?}",
-            our_duration
+            "Complex struct - our implementation duration: {our_duration:?}"
         );
 
         // Allow up to 15x slower for complex structures
         assert!(
             our_duration < serde_duration * 15,
-            "Our implementation is too slow for complex structures: {:?} vs {:?}",
-            our_duration,
-            serde_duration
+            "Our implementation is too slow for complex structures: {our_duration:?} vs {serde_duration:?}"
         );
     }
 
@@ -3634,8 +3625,8 @@ mod compatibility_tests {
         let our_null: Result<OptionalStruct> = from_str(null_json);
 
         // Debug the results
-        println!("serde_null result: {:?}", serde_null);
-        println!("our_null result: {:?}", our_null);
+        println!("serde_null result: {serde_null:?}");
+        println!("our_null result: {our_null:?}");
 
         if serde_null.is_ok() && our_null.is_ok() {
             assert_eq!(serde_null.unwrap(), our_null.unwrap());

@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use serde_json;
 use std::collections::{BTreeMap, HashMap};
 
 use serdify::{Result as CustomResult, from_str as custom_from_str};
@@ -200,17 +199,15 @@ mod integration_compatibility_tests {
                 serde_json::from_str(json);
             let custom_result: CustomResult<serde_json::Value> = custom_from_str(json);
 
-            assert!(serde_result.is_ok(), "serde_json failed for: {}", json);
+            assert!(serde_result.is_ok(), "serde_json failed for: {json}");
             assert!(
                 custom_result.is_ok(),
-                "custom implementation failed for: {}",
-                json
+                "custom implementation failed for: {json}"
             );
             assert_eq!(
                 serde_result.unwrap(),
                 custom_result.unwrap(),
-                "Results differ for: {}",
-                json
+                "Results differ for: {json}"
             );
         }
     }
@@ -229,17 +226,15 @@ mod integration_compatibility_tests {
                 serde_json::from_str(json);
             let custom_result: CustomResult<serde_json::Value> = custom_from_str(json);
 
-            assert!(serde_result.is_ok(), "serde_json failed for: {}", json);
+            assert!(serde_result.is_ok(), "serde_json failed for: {json}");
             assert!(
                 custom_result.is_ok(),
-                "custom implementation failed for: {}",
-                json
+                "custom implementation failed for: {json}"
             );
             assert_eq!(
                 serde_result.unwrap(),
                 custom_result.unwrap(),
-                "Results differ for: {}",
-                json
+                "Results differ for: {json}"
             );
         }
     }
@@ -257,7 +252,7 @@ mod integration_compatibility_tests {
             })
             .collect::<Vec<_>>()
             .join(",");
-        let json = format!("[{}]", large_array);
+        let json = format!("[{large_array}]");
 
         let serde_result: std::result::Result<Vec<serde_json::Value>, _> =
             serde_json::from_str(&json);

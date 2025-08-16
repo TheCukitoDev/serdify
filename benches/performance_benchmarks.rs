@@ -1,6 +1,5 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion, BenchmarkId};
 use serde::{Deserialize, Serialize};
-use serde_json;
 use std::collections::HashMap;
 
 // Import the serdify library functions
@@ -23,15 +22,15 @@ fn generate_test_data(size: usize) -> String {
     for i in 0..size {
         let item = BenchStruct {
             id: i as u64,
-            name: format!("User{}", i),
-            email: format!("user{}@example.com", i),
+            name: format!("User{i}"),
+            email: format!("user{i}@example.com"),
             age: 20 + (i % 50) as u32,
             active: i % 2 == 0,
             score: (i as f64) * 3.14,
             tags: vec![format!("tag{}", i), format!("category{}", i % 10)],
             metadata: {
                 let mut map = HashMap::new();
-                map.insert(format!("key{}", i), format!("value{}", i));
+                map.insert(format!("key{i}"), format!("value{i}"));
                 map.insert("type".to_string(), "user".to_string());
                 map
             },

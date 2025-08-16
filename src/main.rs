@@ -45,8 +45,8 @@ fn main() {
     let valid_json = r#"{"name": "Alice", "age": 25, "score": 1500, "balance": 10000}"#;
     let result: Result<UserData> = from_str(valid_json);
     match result {
-        Result::Ok(value) => println!("✅ Successfully parsed: {:?}\n", value),
-        Result::Err(error) => println!("❌ Error: {:?}\n", error),
+        Result::Ok(value) => println!("✅ Successfully parsed: {value:?}\n"),
+        Result::Err(error) => println!("❌ Error: {error:?}\n"),
     }
 
     // Example 2: Multiple range violations (shows error collection)
@@ -58,7 +58,7 @@ fn main() {
     let range_error_json = r#"{"name": "Bob", "age": 256, "score": 50000, "balance": 5000000000}"#;
     let result: Result<UserData> = from_str(range_error_json);
     match result {
-        Result::Ok(value) => println!("✅ Successfully parsed: {:?}\n", value),
+        Result::Ok(value) => println!("✅ Successfully parsed: {value:?}\n"),
         Result::Err(error) => {
             println!("❌ RFC 7807 Error Response:");
             println!("   Title: {}", error.title);
@@ -83,7 +83,7 @@ fn main() {
     let missing_fields_json = r#"{"name": "Charlie"}"#;
     let result: Result<UserData> = from_str(missing_fields_json);
     match result {
-        Result::Ok(value) => println!("✅ Successfully parsed: {:?}\n", value),
+        Result::Ok(value) => println!("✅ Successfully parsed: {value:?}\n"),
         Result::Err(error) => {
             println!("❌ RFC 7807 Error Response:");
             println!("   Title: {}", error.title);
@@ -107,12 +107,12 @@ fn main() {
     let syntax_error_json = r#"{"name": "Dave", "age": 30,}"#; // trailing comma
     let result: Result<UserData> = from_str(syntax_error_json);
     match result {
-        Result::Ok(value) => println!("✅ Successfully parsed: {:?}\n", value),
+        Result::Ok(value) => println!("✅ Successfully parsed: {value:?}\n"),
         Result::Err(error) => {
             println!("❌ RFC 7807 Error Response:");
             println!("   Title: {}", error.title);
             if let Some(detail) = &error.detail {
-                println!("   Detail: {}", detail);
+                println!("   Detail: {detail}");
             }
             println!("   Invalid Parameters: {}", error.invalid_params.len());
             println!();
@@ -129,7 +129,7 @@ fn main() {
 
     let result: Result<UserWithGrades> = from_str(array_json);
     match result {
-        Result::Ok(value) => println!("✅ Successfully parsed: {:?}\n", value),
+        Result::Ok(value) => println!("✅ Successfully parsed: {value:?}\n"),
         Result::Err(error) => {
             println!("❌ RFC 7807 Error Response:");
             println!("   Title: {}", error.title);
@@ -164,7 +164,7 @@ fn main() {
     println!("JSON: (nested object with range violations)");
     let result: Result<NestedData> = from_str(nested_json);
     match result {
-        Result::Ok(value) => println!("✅ Successfully parsed: {:?}\n", value),
+        Result::Ok(value) => println!("✅ Successfully parsed: {value:?}\n"),
         Result::Err(error) => {
             println!("❌ RFC 7807 Error Response:");
             println!("   Title: {}", error.title);

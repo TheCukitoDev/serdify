@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use serde_json;
 use std::collections::HashMap;
 
 // Import the serdify library functions
@@ -93,12 +92,11 @@ mod compatibility_tests {
                 assert_eq!(
                     serde_result.unwrap(),
                     custom_result.unwrap(),
-                    "Results differ for: {}",
-                    json
+                    "Results differ for: {json}"
                 );
             } else {
                 // Skip cases where implementations differ - focus on successful compatibility
-                println!("Skipping case with implementation differences: {}", json);
+                println!("Skipping case with implementation differences: {json}");
             }
         }
     }
@@ -199,17 +197,15 @@ mod compatibility_tests {
                 serde_json::from_str(json);
             let custom_result: CustomResult<serde_json::Value> = custom_from_str(json);
 
-            assert!(serde_result.is_ok(), "serde_json failed for: {}", json);
+            assert!(serde_result.is_ok(), "serde_json failed for: {json}");
             assert!(
                 custom_result.is_ok(),
-                "custom implementation failed for: {}",
-                json
+                "custom implementation failed for: {json}"
             );
             assert_eq!(
                 serde_result.unwrap(),
                 custom_result.unwrap(),
-                "Results differ for: {}",
-                json
+                "Results differ for: {json}"
             );
         }
     }
