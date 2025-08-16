@@ -8,25 +8,3 @@ authors = ["Gabriel Díaz Aguilera <gabriel@cukkito.me>"]
 categories = ["parsing"]
 license = "MIT OR Apache-2.0"
 documentation = "https://docs.rs/serdify"
-
-[[bin]]
-name = "serdify"
-path = "src/main.rs"
-
-[dependencies]
-eserde = { version = "0.1.7", features = ["json"] }
-jsonschema = "0.32.1"
-schemars = "1.0.4"
-serde = { version = "1.0.219", features = ["derive"] }
-serde_json = "1.0.142"
-serde_path_to_error = "0.1.17"
-
-[dev-dependencies]
-criterion = { version = "0.5", features = ["html_reports"] }
-
-[[bench]]
-name = "performance_benchmarks"
-harness = false
-
-[profile.bench]
-debug = true
